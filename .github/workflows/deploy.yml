@@ -1,0 +1,27 @@
+name: Deploy Storage Infrastructure
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy storage infrastructure
+        run: |
+          ./scripts/deploy-storage.sh \
+            --name "publicwebsite$(date +%s)" \
+            --location "eastus" \
+            --sku "Standard_RAGRS" \
+            --soft-delete-days 21
+
+  --soft-delete-days 21
